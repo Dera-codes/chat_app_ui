@@ -12,15 +12,15 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   buildMessage(Message message, bool isMe) {
-    return Container(
+    final Container msg = Container(
       margin: isMe
           ? EdgeInsets.only(top: 8, bottom: 8, left: 80)
           : EdgeInsets.only(
               top: 8,
               bottom: 8,
-              right: 80,
             ),
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
         color:
             isMe ? Theme.of(context).colorScheme.secondary : Color(0xFFFFEFEE),
@@ -55,6 +55,25 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+    if (isMe) {
+      return msg;
+    }
+    return Row(
+      children: [
+        !isMe
+            ? IconButton(
+                icon: message.isLiked
+                    ? Icon(Icons.favorite)
+                    : Icon(Icons.favorite_border),
+                iconSize: 30,
+                color: message.isLiked
+                    ? Theme.of(context).primaryColor
+                    : Colors.blueGrey,
+                onPressed: () {},
+              )
+            : Text('h')
+      ],
+    );
   }
 
   @override
@@ -77,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
             iconSize: 30,
             color: Colors.white,
             onPressed: () {},
-          )
+          ),
         ],
       ),
       body: Column(
@@ -97,6 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   topRight: Radius.circular(30),
                 ),
                 child: ListView.builder(
+                  reverse: true,
                   padding: EdgeInsets.only(top: 15),
                   itemCount: messages.length,
                   itemBuilder: (BuildContext context, int index) {
